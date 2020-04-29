@@ -50,10 +50,10 @@ body {
     outline: none;
     border:2px solid #ffcc29;
 }
-.form-control.success-color input {
+.form-control.success input {
     border-color: var(--success-color);
 }
-.form-control.error-color input {
+.form-control.error input {
     border-color: var(--error-color);
 }
 .form-control small {
