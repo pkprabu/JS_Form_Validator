@@ -1,14 +1,15 @@
 // Using destructuring
 // const [UserName, Email, Password, ConfirmPassword] = document.querySelectorAll(`#username, #email, #password, #confirmPassword`);
 
-const fields = document.querySelectorAll(`#username, #email, #password, #confirmPassword`);
+/* const fields = document.querySelectorAll(`#username, #email, #password, #confirmPassword`);
+console.log(fields); */
 // console.log(pk);
 
 // Using getElementById method.
-/* const username = document.getElementById(`username`);
+const username = document.getElementById(`username`);
 const email = document.getElementById(`email`);
 const password = document.getElementById(`password`);
-const confirmPassword = document.getElementById(`confirmPassword`); */
+const confirmPassword = document.getElementById(`confirmPassword`);
 
 function showError(input, message) {
     const formControl = input.parentElement;
@@ -22,13 +23,20 @@ function showSuccess(input) {
     formControl.className = `form-control success`;
 }
 
-function isValidEmail(emailId) {
+function checkEmail(input) {
     const regEx = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    return regEx.test(String(emailId).toLowerCase());
+    // return regEx.test(String(emailId).toLowerCase());
+    if(regEx.test(input.value)) {
+        showSuccess(input);
+    } else {
+        showError(input, `Email is not valid.`);
+    }
 }
+
 function getName(name) {
     return name.id.charAt(0).toUpperCase() + name.id.slice(1);
 }
+
 function checkRequired(inputArr) {
     const inputs = inputArr;
     console.log(inputs);
@@ -41,9 +49,29 @@ function checkRequired(inputArr) {
     }
 }
 
+function checkLength(input, min, max) {
+    const length = input.value.length;
+    if(length < min) {
+        showError(input, `Field should have atleast ${min} Characters.`);
+    } else if(length > max) {
+        showError(input, `Not more than ${max} Characters.`);
+    } else {
+        showSuccess(input);
+    }
+}
+
+function checkPasswordsMatch(input1, input2) {
+    if (input1.value !== input2.value) {
+        showError(input2, `Password do not match`);
+    } 
+}
 form.addEventListener('submit', function(e){
     e.preventDefault();
-    checkRequired(fields);
+    checkRequired([username, email, password, confirmPassword]);
+    checkLength(username, 4, 16);
+    checkLength(password, 6, 10);
+    checkEmail(email);
+    checkPasswordsMatch(password, confirmPassword);  
     /* if (UserName.value === '') {
         showError(UserName, `Username is required.`);   
     } else {
@@ -55,7 +83,7 @@ form.addEventListener('submit', function(e){
     } else if (!isValidEmail(email.value)) {
         showError(email, `Email is not valid.`);
     } else {
-        showSuccess(email);
+        showSuccess(email);  
     }
 
     if (password.value === '') {
